@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "541380418033",
+    "project_id": "alcopper-472bb",
+    "storage_bucket": "alcopper-472bb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541380418033:android:e69ff674076d70f96ecc50",
+        "android_client_info": {
+          "package_name": "Al_copper.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz2A3bE5Y7tXoJ6c_Sv3QwAuQ2WqYjJ5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541380418033:android:8fb790a534a1bb8a6ecc50",
+        "android_client_info": {
+          "package_name": "com.example.al_copper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz2A3bE5Y7tXoJ6c_Sv3QwAuQ2WqYjJ5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
