@@ -5,6 +5,7 @@ import 'buy_screen.dart'; // Import BuyScreen for navigation
 import 'consultancy_screen.dart'; // Import ConsultancyScreen for navigation
 import 'profile_screen.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    HomePage(userName: 'John Doe'), // Add custom name here
+    HomePage(userName: 'Shubham'), // Add custom name here
     RetailScreen(),
     BuyScreen(),
     ConsultancyScreen(),
@@ -31,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Usha Metals'),
+        title: Text('AlCopper'),
         backgroundColor: Color(0xFF121212),
         actions: [
           IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: 'Retail'),
+            BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: 'Live Rates'),
             BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Buy'),
             BottomNavigationBarItem(icon: Icon(Icons.help), label: 'Consultancy'),
           ],
@@ -132,17 +133,17 @@ class HomePage extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Text(
-            'Brochure: ',
+            'Feedback email: ',
             style: TextStyle(color: Colors.white70, fontSize: 16),
           ),
 
           SizedBox(height: 4),
           InkWell(
             onTap: () {
-              // Implement brochure download or view functionality
+              'USHAMETALS29@gmail.com';
             },
             child: Text(
-              'Click here to view our brochure',
+              'USHAMETALS29@gmail.com',
               style: TextStyle(color: Colors.blueAccent, fontSize: 16, decoration: TextDecoration.underline),
             ),
           ),
@@ -151,11 +152,27 @@ class HomePage extends StatelessWidget {
             'Company Information:',
             style: TextStyle(color: Colors.white70, fontSize: 16),
           ),
-          SizedBox(height: 4),
+          SizedBox(height: 10),
           Text(
-            'Usha Metals is a leading company in the metal industry, providing a wide range of metal products and services. Our mission is to deliver high-quality metal products to our customers with excellent customer service.',
+            'AlCopper is a leading company in the metal industry, providing a wide range of metal products and services. Our mission is to deliver high-quality metal products to our customers with excellent customer service.',
             style: TextStyle(color: Colors.white70, fontSize: 16),
           ),
+          SizedBox(height:16),
+          InkWell(
+            onTap: () async {
+              final url = 'https://wa.me/919565909177';
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'Could not launch $url';
+              }
+            },
+            child: Text(
+              'Whatsapp for Enquiry ',
+              style: TextStyle(color: Colors.green, fontSize: 16, decoration: TextDecoration.underline),
+            ),
+          ),
+
         ],
       ),
     );
@@ -187,7 +204,7 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildMetalCard('Lead', '\$10,000/kg', Icons.battery_charging_full, Colors.blueGrey),
-              _buildMetalCard('Tin', '\$20,000/kg', Icons.kitchen, Colors.brown),
+              _buildMetalCard('Iron', '\$20,000/kg', Icons.construction, Colors.brown),
             ],
           ),
           SizedBox(height: 8),

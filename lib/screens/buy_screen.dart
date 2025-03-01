@@ -1,5 +1,27 @@
 import 'package:flutter/material.dart';
 import 'dart:ui'; // For ImageFilter
+import 'package:url_launcher/url_launcher.dart'; // Add this import for URL launching
+import 'package:pay/pay.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+
+// List of books with local image paths and download links
+final List<Book> books = [
+  Book('5 Aluminum Scrap Type International', 'lib/images/B1.png', 'https://drive.google.com/file/d/1RjToDL58u__ivovald8jp50k9HhBoMrO/view'),
+  Book('Lead Acid Batteries', 'lib/images/B2.png', 'https://drive.google.com/file/d/1RjToDL58u__ivovald8jp50k9HhBoMrO/view'),
+  Book('Copper Recycling', 'lib/images/B3.png', 'https://drive.google.com/file/d/1ZPfRKGEAM37KdM4XXBMnlXuPype0WNiu/view'),
+  Book('Aluminium Scrap Domestic', 'lib/images/B4.png', 'https://drive.google.com/file/d/1l3ePl3WEd5Gorzoc-4dvUBv7SXUtDPOh/view'),
+  Book('Ferrous Scrap Grades', 'lib/images/B5.png', 'https://drive.google.com/file/d/1qAPNvc9vonLqxRkuIugVQMz4LYaGzmql/view'),
+  Book('Iron and Scrap Types', 'lib/images/B6.png', 'https://drive.google.com/file/d/1veWubZlcEqssjs3HF8xRDjZGl0g9QAcQ/view'),
+  Book('Mixed Metal Types of Grades', 'lib/images/B7.png', 'https://drive.google.com/file/d/1UnwmWeQS_bvLiSgWKIqgrmwazsMe4Q-t/view'),
+];
+
+class Book {
+  final String title;
+  final String firstPageImagePath;
+  final String downloadLink;
+
+  Book(this.title, this.firstPageImagePath, this.downloadLink);
+}
 
 class BuyScreen extends StatelessWidget {
   @override
@@ -24,7 +46,7 @@ class BuyScreen extends StatelessWidget {
             mainAxisSpacing: 10,
             childAspectRatio: 0.75, // Adjust the aspect ratio for card size
           ),
-          itemCount: bookNames.length, // Use the length of the bookNames list
+          itemCount: books.length, // Use the length of the books list
           itemBuilder: (context, index) {
             return _buildBookCard(context, index);
           },
@@ -55,7 +77,7 @@ class BuyScreen extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => BookPreviewScreen(bookNames[index])),
+          MaterialPageRoute(builder: (context) => BookPreviewScreen(books[index])),
         );
       },
       child: GlassmorphicContainer(
@@ -101,13 +123,29 @@ class BuyScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    bookNames[index],
+                    books[index].title,
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
                   Text(
-                    '₹Price',
+                    '₹1000',
                     style: TextStyle(color: Colors.white70),
+                  ),
+                  SizedBox(height: 8),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.redAccent),
+                    ),
+                    onPressed: () async {
+                      // Redirect to WhatsApp link
+                      final whatsappUrl = 'https://wa.me/919565909177?text=Hi, I am interested in purchasing the book: ${books[index].title}';
+                      if (await canLaunch(whatsappUrl)) {
+                        await launch(whatsappUrl);
+                      } else {
+                        throw 'Could not launch $whatsappUrl';
+                      }
+                    },
+                    child: Text('Buy Now'),
                   ),
                 ],
               ),
@@ -181,23 +219,11 @@ class GlassmorphicContainer extends StatelessWidget {
   }
 }
 
-// List of book names
-final List<String> bookNames = [
-  '5 Aluminum Scrap Type International',
-  'Domestic Aluminium Scrap Type',
-  'Lead Types of Grades and Process',
-  'Copper Book',
-  'Lead Acid Battery Merged',
-  'Iron and Scrap Types',
-  'Mixed Metal Types of Grades',
-  'Motor Scrap Types and Recovery',
-];
-
 // Book Preview Screen
 class BookPreviewScreen extends StatelessWidget {
-  final String bookTitle;
+  final Book book;
 
-  BookPreviewScreen(this.bookTitle);
+  BookPreviewScreen(this.book);
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +238,7 @@ class BookPreviewScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              bookTitle,
+              book.title,
               style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
@@ -221,66 +247,22 @@ class BookPreviewScreen extends StatelessWidget {
               style: TextStyle(color: Colors.white70, fontSize: 18),
             ),
             SizedBox(height: 16),
-            Text(
-              'First Page of the Book...',
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
+            Image.asset(book.firstPageImagePath), // Display the first page as an image from the local path
             Spacer(),
             ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.redAccent),
               ),
-              onPressed: () {
-                // Handle purchase
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FullBookScreen(bookTitle)),
-                );
+              onPressed: () async {
+                // Redirect to WhatsApp link
+                final whatsappUrl = 'https://wa.me/919565909177?text=Hi, I am interested in purchasing the book: ${book.title}';
+                if (await canLaunch(whatsappUrl)) {
+                  await launch(whatsappUrl);
+                } else {
+                  throw 'Could not launch $whatsappUrl';
+                }
               },
               child: Text('Buy Now to Read More'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// Full Book Screen
-class FullBookScreen extends StatelessWidget {
-  final String bookTitle;
-
-  FullBookScreen(this.bookTitle);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Full Book'),
-        backgroundColor: Color(0xFF121212),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              bookTitle,
-              style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Author: Puneet Kumar',
-              style: TextStyle(color: Colors.white70, fontSize: 18),
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  'Full Content of the Book...',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
             ),
           ],
         ),

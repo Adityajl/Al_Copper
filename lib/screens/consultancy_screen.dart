@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ConsultancyScreen extends StatelessWidget {
   @override
@@ -144,7 +145,26 @@ class ConsultancyScreen extends StatelessWidget {
 
   String _plantSetupDetails() {
     return '''
-Plant setup details go here...'''; // Placeholder for actual details
+    
+- Tyre Scrap Project Report (18% GST)+25000:-
+Below 1Cr project: 25,000+(18% GST) upon 1Cr project 50,000 to 1,00,000 (Depends on Project)
+
+- Lead Ingot Project Report :-
+Below 1Cr Project 30,000(+18%) upon 1Cr project 40,000 + 1,00,000 (+18 gst)
+
+- Battery Recycling Project Report :-
+Below 1Cr project 40,000 to 1,00,000 (+18% gst)
+
+- E-waste Recycling Project Report :-
+Below 1Cr project 40,000 (18%) upon 1Cr Project 40,000 to 1,00,000 (18% GST)
+
+- Copper Recycling Project Report :-
+Below 1Cr Project 40,000 (+18%) upon 1Cr Project 60,000 to 1,00,000 (18% GST)
+
+- Aluminium Recycling Project Report :-
+Below 1Cr Project 50,000 + (18%) upon 1Cr Project 50,000 to 2,00,000 depends on project cost (+18%) 
+    
+    '''; // Placeholder for actual details
   }
 }
 
@@ -168,25 +188,46 @@ class CourseDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(courseName,
-                  style:
-                  TextStyle(fontSize:
-                  32,fontWeight:
-                  FontWeight.bold,color:
-                  Colors.white)),
-              SizedBox(height:
-              16),
-              Text('Course Description:',style:
-              TextStyle(fontSize:
-              24,color:
-              Colors.white)),
-              SizedBox(height:
-              8),
-              Text(description,
-                  style:
-                  TextStyle(fontSize:
-                  18,color:
-                  Colors.white70)),
+              Text(
+                courseName,
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Course Description:',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                description,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white70,
+                ),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.tealAccent),
+                ),
+                onPressed: () async {
+                  // WhatsApp link
+                  final whatsappUrl = 'https://wa.me/919565909177?text=Hi, I am interested in enrolling in the course: $courseName';
+                  if (await canLaunch(whatsappUrl)) {
+                    await launch(whatsappUrl);
+                  } else {
+                    throw 'Could not launch $whatsappUrl';
+                  }
+                },
+                child: Text('Contact and Pay via WhatsApp', style: TextStyle(color: Colors.black)),
+              ),
             ],
           ),
         ),

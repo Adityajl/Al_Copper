@@ -5,7 +5,8 @@ import 'firebase_options.dart'; // Import generated file by Firebase CLI
 import 'screens/home_screen.dart'; // Import HomeScreen
 import 'screens/retail_screen.dart'; // Import RetailScreen
 import 'screens/login_screen.dart'; // Import LoginScreen
-import 'screens/register_screen.dart'; // Import RegisterScreen
+import 'screens/register_screen.dart';// Import RegisterScreen
+import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,7 @@ void main() async {
 class MetalsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -28,7 +29,9 @@ class MetalsApp extends StatelessWidget {
           Theme.of(context).textTheme.apply(bodyColor: Colors.white, displayColor: Colors.white),
         ),
       ),
-      initialRoute: '/',
+      // Set HomeScreen as the initial screen
+      // Uncomment this section when you want to use routes again
+      // initialRoute: '/',
       routes: {
         '/': (context) => RegisterScreen(),
         '/home': (context) => HomeScreen(),
