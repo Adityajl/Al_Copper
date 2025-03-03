@@ -1,3 +1,6 @@
+import 'package:Al_copper/screens/admin_panel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import for date formatting
 import 'retail_screen.dart'; // Import RetailScreen for navigation
@@ -14,13 +17,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  bool _isAdmin = false; // Track if the user is an admin
+  String _name = "";
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  final List<Widget> _pages = [
-    HomePage(userName: 'Shubham'), // Add custom name here
-    RetailScreen(),
-    BuyScreen(),
-    ConsultancyScreen(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _checkIfAdmin(); // Check if the user is an admin
+  }
+
+  Future<void> _checkIfAdmin() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      if(userDoc.exists){
+        setState(() {
+          _name = userDoc.data()?['name'];
+        });
+      }
+      if (userDoc.exists && userDoc.data()?['role'] == 'admin') {
+        setState(() {
+          _isAdmin = true;
+        });
+      }
+    }
+  }
+
+
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -30,6 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      HomePage(userName: _name), // Add custom name here
+      RetailScreen(),
+      BuyScreen(),
+      ConsultancyScreen(),
+      AdminPanel(),
+    ];
     return Scaffold(
       appBar: AppBar(
         title: Text('AlCopper'),
@@ -51,7 +84,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         child: BottomNavigationBar(
-          items: const [
+          items: _isAdmin
+              ? const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: 'Live Rates'),
+            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Buy'),
+            BottomNavigationBarItem(icon: Icon(Icons.help), label: 'Consultancy'),
+            BottomNavigationBarItem(icon: Icon(Icons.admin_panel_settings), label: 'Admin Panel'), // Admin Panel option
+          ]
+              : const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: 'Live Rates'),
             BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Buy'),

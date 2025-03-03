@@ -83,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       print('Error registering with email: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Registration failed: $e")),
+        SnackBar(content: Text("Registration failed: ${e.toString()}")),
       );
     }
   }
@@ -119,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       print('Error registering with phone: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error registering with phone: $e")),
+        SnackBar(content: Text("Error registering with phone: ${e.toString()}")),
       );
     }
   }
@@ -153,7 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       print('Error submitting OTP: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("OTP verification failed: $e")),
+        SnackBar(content: Text("OTP verification failed: ${e.toString()}")),
       );
     }
   }
@@ -182,7 +182,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       print('Error logging in with email: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login failed: $e")),
+        SnackBar(content: Text("Login failed: ${e.toString()}")),
       );
     }
   }
@@ -218,7 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       print('Error sending OTP: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error sending OTP: $e")),
+        SnackBar(content: Text("Error sending OTP: ${e.toString()}")),
       );
     }
   }
@@ -240,7 +240,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       print('Error submitting OTP: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("OTP login failed: $e")),
+        SnackBar(content: Text("OTP login failed: ${e.toString()}")),
       );
     }
   }
@@ -362,7 +362,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _role = newValue!;
                     });
                   },
-                  items: <String>['user', 'admin']
+                  items: <String>['user']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,

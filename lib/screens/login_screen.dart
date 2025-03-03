@@ -1,7 +1,10 @@
+import 'package:Al_copper/screens/admin_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -28,8 +31,17 @@ class _LoginScreenState extends State<LoginScreen> {
         Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
         if (userData['role'] == 'admin') {
           // Navigate to admin dashboard
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),  // Navigate to home screen
+          );
         } else {
           // Navigate to user dashboard
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),  // Navigate to home screen
+          );
+
         }
       }
     } catch (e) {

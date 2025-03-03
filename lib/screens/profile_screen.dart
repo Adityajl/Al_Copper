@@ -1,3 +1,6 @@
+import 'package:Al_copper/screens/profile_update_details_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart'; // For animations
 import 'package:intl/intl.dart';
@@ -11,6 +14,12 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var _userName = '';
+  var _userEmailId = '';
+  var _userAddress = '';
+  var _userContactNumber = '';
 
   @override
   void initState() {
@@ -19,6 +28,22 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat(reverse: true);
+    _getUserDetails();
+  }
+
+  Future<void> _getUserDetails() async{
+    final user = _auth.currentUser;
+    if (user != null) {
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      if(userDoc.exists){
+        setState(() {
+          _userName = userDoc.data()?['name'];
+          _userEmailId = userDoc.data()?['email']?? 'Not provided';
+          _userAddress = userDoc.data()?['address']?? 'Not provided';
+          _userContactNumber = userDoc.data()?['phone']?? 'Not provided';
+        });
+      }
+    }
   }
 
   @override
@@ -35,6 +60,17 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         title: Text('Profile'),
         backgroundColor: Color(0xFF121212),
         elevation: 0,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileSetupScreen()),
+                ).then((_) => _getUserDetails()); // Refresh profile data after editing
+              },
+            ),
+          ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -74,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             SizedBox(height: 20),
             // Name with gradient text style
             Text(
-              'John Doe',
+              _userName,
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
@@ -103,9 +139,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             ),
             SizedBox(height: 30),
             // Profile details section with improved styling
-            _buildProfileDetail(Icons.email, 'Email', 'john.doe@example.com'),
-            _buildProfileDetail(Icons.phone, 'Phone', '+91 12345 67890'),
-            _buildProfileDetail(Icons.location_on, 'Location', 'Delhi, India'),
+            _buildProfileDetail(Icons.email, 'Email', _userEmailId),
+            _buildProfileDetail(Icons.phone, 'Phone', _userContactNumber),
+            _buildProfileDetail(Icons.location_on, 'Location', _userAddress),
             SizedBox(height: 30),
             // Last transactions section
             Text(

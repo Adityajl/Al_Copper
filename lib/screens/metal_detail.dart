@@ -6,16 +6,26 @@ class MetalDetailScreen extends StatelessWidget {
   final String price;
   final String change;
   final Color color;
-  final List<Map<String, String>> types; // Update to include prices
+  final List<Map<String, dynamic>> types;
+  final String priceType; // Add this parameter
 
   MetalDetailScreen({
     required this.metalName,
     required this.price,
     required this.change,
     required this.color,
-    required this.types, // Initialize the list of metal types with prices
+    required this.types,
+    required this.priceType, // Initialize the parameter
   });
-
+  String capitalize(String input) {
+    if (input == null) {
+      throw new ArgumentError("string: $input");
+    }
+    if (input.length == 0) {
+      return input;
+    }
+    return input[0].toUpperCase() + input.substring(1);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,8 +125,8 @@ class MetalDetailScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('International Price:', style: TextStyle(color: Colors.white70)),
-                              Text(type['international'] ?? '', style: TextStyle(color: Colors.white)),
+                              Text('${capitalize(priceType)} Price:', style: TextStyle(color: Colors.white70)), // Use priceType
+                              Text(type[priceType.toLowerCase()] ?? '', style: TextStyle(color: Colors.white)), // Use priceType
                             ],
                           ),
                         ],
