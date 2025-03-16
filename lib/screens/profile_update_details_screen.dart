@@ -11,8 +11,15 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _addressController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  @override void initState() {
+    // TODO: implement initState
+    _fetchDetails();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +45,11 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                 validator: (value) => value!.isEmpty ? 'Required' : null,
                 keyboardType: TextInputType.phone,
               ),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: (value) => value!.isEmpty ? 'Required' : null,
+              ),
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _saveProfile,
@@ -57,16 +69,33 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
         await _firestore.collection('users').doc(user.uid).update({
           'address': _addressController.text,
           'phone': _phoneController.text,
+          'email':_emailController,
         });
         Navigator.pop(context); // Return to the previous screen
       }
     }
   }
 
+  Future<void> _fetchDetails() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        setState(() {
+          _addressController.text = userDoc['address'] ?? '';
+          _phoneController.text = userDoc['phone'] ?? '';
+          _emailController.text = userDoc['email'] ?? '';
+        });
+      }
+    }
+  }
+
+
   @override
   void dispose() {
     _addressController.dispose();
     _phoneController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 }

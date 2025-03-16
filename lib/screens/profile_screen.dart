@@ -7,6 +7,9 @@ import 'package:intl/intl.dart';
 
 import 'dart:ui';
 
+import '../utils/session_manager.dart';
+import 'login_screen.dart';
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -29,6 +32,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       vsync: this,
     )..repeat(reverse: true);
     _getUserDetails();
+  }
+
+  Future<void> logout() async {
+    await SessionManager.clearSessionData();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
   }
 
   Future<void> _getUserDetails() async{
@@ -103,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
                 child: CircleAvatar(
                   radius: 70,
-                  backgroundImage: NetworkImage('<Your Profile Picture URL>'),
+                  // backgroundImage: NetworkImage('<Your Profile Picture URL>'),
                 ),
               ),
             ),
@@ -182,6 +193,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 ),
                 onPressed: () {
                   // Handle logout
+                  logout();
+
                 },
                 child: Text(
                   'Logout',

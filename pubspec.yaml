@@ -23,6 +23,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   razorpay_flutter: ^1.4.0
   get: ^4.6.6
+  shared_preferences: ^2.5.2
 
 dev_dependencies:
   flutter_test:

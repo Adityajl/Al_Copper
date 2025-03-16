@@ -1,0 +1,1 @@
+F:\Flutter Projects\Al_Copper\build\app\intermediates\cxx\RelWithDebInfo\e6v4s32c\obj\arm64-v8a

@@ -1,3 +1,4 @@
+import 'package:Al_copper/screens/verification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -75,10 +76,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Registration successful!")),
         );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),  // Navigate to home screen
-        );
+        user.sendEmailVerification();
+        if (user.emailVerified) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen()), // Navigate to home screen
+          );
+        }
+        else{
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EmailVerificationScreen()), // Navigate to home screen
+          );
+        }
       }
     } catch (e) {
       print('Error registering with email: $e');
@@ -99,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         },
         verificationFailed: (FirebaseAuthException e) {
-          print('Error registering with phone: $e');
+          print('Error registering with phone: ${e.message}');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Verification failed: ${e.message}")),
           );
@@ -116,10 +128,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           });
         },
       );
-    } catch (e) {
-      print('Error registering with phone: $e');
+    } on FirebaseAuthException catch (e) {
+      print('FirebaseAuthException: ${e.message}');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error registering with phone: ${e.toString()}")),
+        SnackBar(content: Text("Error: ${e.message}")),
+      );
+    } catch (e) {
+      print('Unexpected error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Unexpected error: $e")),
       );
     }
   }
@@ -248,7 +265,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF121212),
+      backgroundColor: Color(0xFF121212), // Dark background color
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -257,6 +274,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Title based on the current mode (OTP, Phone, or Email)
                 Text(
                   _isOTPMode ? 'Login with OTP' : (_isPhoneRegister ? 'Register with Phone' : 'Register with Email'),
                   style: GoogleFonts.roboto(
@@ -267,6 +285,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 30),
+                // Show name and company fields if not in OTP mode
                 if (!_isOTPMode)
                   ...[
                     TextField(
@@ -300,6 +319,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SizedBox(height: 20),
                   ],
+                // Email or Phone field based on the registration method
                 TextField(
                   controller: _isPhoneRegister ? _phoneController : _emailController,
                   decoration: InputDecoration(
@@ -316,6 +336,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   keyboardType: _isPhoneRegister ? TextInputType.phone : TextInputType.emailAddress,
                 ),
                 SizedBox(height: 20),
+                // Password field if not in OTP mode and not using phone registration
                 if (!_isOTPMode && !_isPhoneRegister)
                   TextField(
                     controller: _passwordController,
@@ -332,6 +353,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: TextStyle(color: Colors.white),
                     obscureText: true,
                   ),
+                // OTP field if OTP has been sent
                 if (_isOTPSent)
                   Column(
                     children: [
@@ -354,23 +376,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ],
                   ),
                 SizedBox(height: 20),
-                DropdownButton<String>(
-                  value: _role,
-                  dropdownColor: Color(0xFF121212),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _role = newValue!;
-                    });
-                  },
-                  items: <String>['user']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value, style: TextStyle(color: Colors.white)),
-                    );
-                  }).toList(),
-                ),
                 SizedBox(height: 20),
+                // Register or Submit OTP button
                 ElevatedButton(
                   onPressed: _isOTPSent
                       ? (_isOTPMode ? _submitLoginOTP : _submitOTP)
@@ -387,6 +394,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
+                // Toggle between phone and email registration
                 TextButton(
                   onPressed: _toggleRegisterMethod,
                   child: Text(
@@ -394,15 +402,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                TextButton(
-                  onPressed: _toggleOTPMode,
-                  child: Text(
-                    _isOTPMode ? 'Switch to Email/Password Login' : 'Switch to OTP Login',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
                 SizedBox(height: 20),
                 Divider(color: Colors.white54), // Optional: to visually separate the sections
+                // Link to the login screen
                 Text(
                   'Already a user?',
                   style: GoogleFonts.roboto(
@@ -426,6 +428,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
+                SizedBox(height: 10), // Add some spacing
+                // Toggle between OTP and email/password login
+                // TextButton(
+                //   onPressed: _toggleOTPMode,
+                //   child: Text(
+                //     _isOTPMode ? 'Switch to Email/Password Login' : 'Switch to OTP Login',
+                //     style: TextStyle(color: Colors.white),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -433,4 +444,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
 }
