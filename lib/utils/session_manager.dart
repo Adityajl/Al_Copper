@@ -22,9 +22,10 @@ class SessionManager {
   }
 
   // Clear session data
-  static Future<void> clearSessionData() async {
+  static Future<bool> clearSessionData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('userId');
     await prefs.remove('role');
+    return true;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:Al_copper/screens/admin_panel.dart';
+import 'package:Al_copper/screens/forgot_password_screen.dart';
 import 'package:Al_copper/screens/register_screen.dart';
 import 'package:Al_copper/screens/verification_screen.dart';
 import 'package:flutter/material.dart';
@@ -287,6 +288,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
+                if(!_isOTPMode)
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                      );
+                    },
+                    child: Text(
+                      'Forgot Password',
+                      style: GoogleFonts.roboto(
+                        fontSize: 16,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
                 TextButton(
                   onPressed: _toggleOTPMode,
                   child: Text(

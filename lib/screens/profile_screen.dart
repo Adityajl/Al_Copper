@@ -35,11 +35,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   }
 
   Future<void> logout() async {
-    await SessionManager.clearSessionData();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-    );
+    await FirebaseAuth.instance.signOut();
+    var resp = await SessionManager.clearSessionData();
+    if(resp) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    }
   }
 
   Future<void> _getUserDetails() async{

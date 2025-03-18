@@ -33,10 +33,7 @@ class MetalsApp extends StatelessWidget {
       // Uncomment this section when you want to use routes again
       // initialRoute: '/',
       routes: {
-        '/': (context) => RegisterScreen(),
-        '/home': (context) => HomeScreen(),
-        '/retail': (context) => RetailScreen(),
-        '/login': (context) => LoginScreen(),
+        '/': (context) => LoginScreen(),
       },
     );
   }
