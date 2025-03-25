@@ -158,53 +158,35 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             _buildProfileDetail(Icons.location_on, 'Location', _userAddress),
             SizedBox(height: 30),
             // Last transactions section
-            Text(
-              'Last Transactions',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 10),
-            _buildTransactionCard('Bought Gold', '₹50,000', DateTime.now()),
-            _buildTransactionCard('Sold Silver', '₹45,000', DateTime.now().subtract(Duration(days: 1))),
-            _buildTransactionCard('Bought Copper', '₹7,000', DateTime.now().subtract(Duration(days: 2))),
-            SizedBox(height: 30),
-            // Courses enrolled section
-            Text(
-              'Courses Enrolled',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 10),
-            _buildCourseCard('Metal Trading 101'),
-            _buildCourseCard('Advanced Metal Analysis'),
-            _buildCourseCard('Metal Markets and Trends'),
+
             SizedBox(height: 20),
             // Add a logout button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.redAccent),
-                  padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 14)),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                ),
-                onPressed: () {
-                  // Handle logout
-                  logout();
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child:
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.redAccent),
+                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 14)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                  ),
+                  onPressed: () {
+                    // Handle logout
+                    logout();
 
-                },
-                child: Text(
-                  'Logout',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  },
+                  child: Text(
+                    'Logout',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
                 ),
               ),
-            ),
+            )
+            )
           ],
         ),
       ),

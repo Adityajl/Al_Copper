@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (role == 'admin') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => AdminPanel()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     } else {
       Navigator.pushReplacement(
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) =>
-                  AdminPanel()), // Navigate to admin panel
+                  HomeScreen()), // Navigate to admin panel
             );
           } else {
             // Navigate to user dashboard
@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (userData['role'] == 'admin') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => AdminPanel()),  // Navigate to admin panel
+          MaterialPageRoute(builder: (context) => HomeScreen()),  // Navigate to admin panel
         );
       } else {
         Navigator.pushReplacement(
